@@ -1,2 +1,2 @@
 #### neural_project
-## KOI BHI MAIN MEIN PUSH NAHI KAREGA BC..
+## Please dont push to main. Create individual branches and work on them
