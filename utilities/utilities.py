@@ -65,8 +65,8 @@ def build_model(model_type, target_series, covariate_series, val_series, val_cov
 
     if model_type == 'arima':
         from arima.model import create_model, load_model, fit_model
-    # elif model_type == 'nbeats':
-    #     from nbeats.model import buildModel, getBestModel, getBestModelForTuning
+    elif model_type == 'nbeats':
+        from nbeats.model import create_model, load_model, fit_model
     # elif model_type == 'nhits':
     #     from nhits.model import buildModel, getBestModel, getBestModelForTuning
     # elif model_type == 'transformer':
