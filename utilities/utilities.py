@@ -130,7 +130,7 @@ def get_metrics(inputs, targets):
     return loss.item(), r2, mae.item()
 
 
-def predict_for_all_data(start_series, series_to_predict, model, forecast_period, input_lag):
+def predict_for_all_data(start_series, series_to_predict, model, forecast_period, input_lag, start_covariate_series=None, covariate_series=None):
     values_to_forecast = len(series_to_predict)
     no_of_iterations = int(values_to_forecast/forecast_period) + \
         (values_to_forecast % forecast_period)
@@ -139,18 +139,35 @@ def predict_for_all_data(start_series, series_to_predict, model, forecast_period
     prediction_list = []
     combined_series = start_series[-input_lag:].concatenate(
         series_to_predict, ignore_time_axis=True)
+
+    # Set combined covariate if past covariate is required
+
+    if covariate_series is None:
+       combined_covariate = None
+    else:
+       combined_covariate = start_covariate_series[-input_lag:].concatenate( \
+                             covariate_series, ignore_time_axis=True)
+
     print("Number of iterations ", no_of_iterations,
           "Target length ", values_to_forecast)
 
     for i in range(no_of_iterations):
         start_position = forecast_period * i
+
+   #  Set past covariate based on combined covariate if it exists (Not none)
+        past_covariate = None
+        if combined_covariate is not None:
+           past_covariate=combined_covariate[:input_lag+start_position]
+
         prediction_series = model.predict(
-            forecast_period, series=combined_series[:input_lag+start_position])
+            forecast_period, series=combined_series[:input_lag+start_position], \
+                          past_covariates=past_covariate)
+
         prediction_list.append(list(prediction_series.values().flatten()))
         # print("interim predict values ", prediction_list)
     prediction_list = reduce(concat, prediction_list)
-    print("predict values for iteration ", i, " Start position ",
-          start_position, "are \n", prediction_list)
+   # print("predict values for iteration ", i, " Start position ",
+   #       start_position, "are \n", prediction_list)
 
     prediction_list = prediction_list[:values_to_forecast]
 

@@ -50,5 +50,5 @@ Thumbs.db
 *.wmv
 
 # Model files
-*.pkl
+*.pkl*
 

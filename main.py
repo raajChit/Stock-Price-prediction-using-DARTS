@@ -53,11 +53,12 @@ if args.mse == 'True':
     plt.xlabel('Forecast period')
     plt.ylabel('MSE values')
     plt.plot(forecast_period, mse_list)
+    plt.savefig('MSE_by_forecast_period.png')
     plt.show()
 
 else:
     predicted_array = np.array(predict_for_all_data(
-        target_series, val_series, model, 3, 64)).flatten()
+        target_series, val_series, model, 3, 64, start_covariate_series=covariate_series, covariate_series=val_covariate_series)).flatten()
 
     plot_labels = ["Actual Values", "Predicted Values"]
     plot_colors = ['r', 'b', 'k']
@@ -66,8 +67,8 @@ else:
 
     plot_predicted([val_series, predicted_series], plot_labels, plot_colors)
 
-    mse_value, r2_value = get_metrics(predicted_series, val_series)
-    print("mse value is : ", mse_value, "\nr2 value is : ", r2_value)
+#    mse_value, r2_value = get_metrics(predicted_series, val_series)
+#    print("mse value is : ", mse_value, "\nr2 value is : ", r2_value)
 exit(0)
 
 mse_list = []
@@ -82,6 +83,8 @@ for i in range(1, 16):
 plot_predicted([val_series[:15], predict_val], plot_labels, plot_colors)
 
 plt.plot(mse_list)
+plt.savefig('mse_list.png')
 plt.show()
 plt.plot(r2_list)
+plt.savefig('r2_list.png')
 plt.show()

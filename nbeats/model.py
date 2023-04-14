@@ -10,6 +10,10 @@ devices = [0] if use_cuda else 1
 
 
 def default_model_config():
+
+    early_stopper = EarlyStopping("val_loss", min_delta=0.00005, patience=4, verbose=True)
+    callbacks = [early_stopper]
+
     model_config = {'input_chunk_length': 64,
                     'output_chunk_length': 3,
                     'generic_architecture': True,
@@ -23,7 +27,8 @@ def default_model_config():
                     'optimizer_kwargs': {'lr': 0.0001},
                     'pl_trainer_kwargs': {
                         'accelerator': accelerator,
-                        'devices': devices},
+                        'devices': devices,
+                        'callbacks': callbacks},
                     'save_checkpoints': True,
                     'force_reset': True,
                     'model_name': 'nbeats_run'}
