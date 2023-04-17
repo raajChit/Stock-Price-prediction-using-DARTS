@@ -15,3 +15,9 @@ def fit_model(model, target_series, covariate_series=None, val_series=None, val_
     model.fit(target_series)
     model.save("./arima/model.pkl")
     return
+
+
+def predict_model(model, forecast_period, series,
+                  past_covariates=None):
+    prediction_series = model.predict(forecast_period, series)
+    return prediction_series

@@ -64,11 +64,11 @@ def build_model(model_type, target_series, covariate_series, val_series, val_cov
     print('Model Type is ', model_type)
 
     if model_type == 'arima':
-        from arima.model import create_model, load_model, fit_model
+        from arima.model import create_model, load_model, fit_model, predict_model
     elif model_type == 'nbeats':
-        from nbeats.model import create_model, load_model, fit_model
-    # elif model_type == 'nhits':
-    #     from nhits.model import buildModel, getBestModel, getBestModelForTuning
+        from nbeats.model import create_model, load_model, fit_model, predict_model
+    elif model_type == 'nhits':
+        from nhits.model import create_model, load_model, fit_model, predict_model
     # elif model_type == 'transformer':
     #     from transformer.model import buildModel, getBestModel, getBestModelForTuning
     # elif model_type == 'tft':
@@ -89,7 +89,7 @@ def build_model(model_type, target_series, covariate_series, val_series, val_cov
     else:
         print('Invalid model name supplied ')
         raise
-    if load:
+    if load == True:
         model = load_model()
     else:
         model = create_model()
@@ -130,7 +130,7 @@ def get_metrics(inputs, targets):
     return loss.item(), r2, mae.item()
 
 
-def predict_for_all_data(start_series, series_to_predict, model, forecast_period, input_lag, start_covariate_series=None, covariate_series=None):
+def predict_for_all_data(start_series, series_to_predict, model, forecast_period, input_lag, start_covariate_series=None, covariate_series=None, model_type='arima'):
     values_to_forecast = len(series_to_predict)
     no_of_iterations = int(values_to_forecast/forecast_period) + \
         (values_to_forecast % forecast_period)
@@ -143,10 +143,10 @@ def predict_for_all_data(start_series, series_to_predict, model, forecast_period
     # Set combined covariate if past covariate is required
 
     if covariate_series is None:
-       combined_covariate = None
+        combined_covariate = None
     else:
-       combined_covariate = start_covariate_series[-input_lag:].concatenate( \
-                             covariate_series, ignore_time_axis=True)
+        combined_covariate = start_covariate_series[-input_lag:].concatenate(
+            covariate_series, ignore_time_axis=True)
 
     print("Number of iterations ", no_of_iterations,
           "Target length ", values_to_forecast)
@@ -157,11 +157,12 @@ def predict_for_all_data(start_series, series_to_predict, model, forecast_period
    #  Set past covariate based on combined covariate if it exists (Not none)
         past_covariate = None
         if combined_covariate is not None:
-           past_covariate=combined_covariate[:input_lag+start_position]
+            past_covariate = combined_covariate[:input_lag+start_position]
 
-        prediction_series = model.predict(
-            forecast_period, series=combined_series[:input_lag+start_position], \
-                          past_covariates=past_covariate)
+            prediction_series = predict_for_model(model_type, model,
+                                                  forecast_period, series=combined_series[:input_lag +
+                                                                                          start_position],
+                                                  past_covariates=past_covariate)
 
         prediction_list.append(list(prediction_series.values().flatten()))
         # print("interim predict values ", prediction_list)
@@ -172,3 +173,16 @@ def predict_for_all_data(start_series, series_to_predict, model, forecast_period
     prediction_list = prediction_list[:values_to_forecast]
 
     return prediction_list
+
+
+def predict_for_model(model_type, model, forecast_period, series,
+                      past_covariates=None):
+    if model_type == 'arima':
+        from arima.model import predict_model
+    elif model_type == 'nbeats':
+        from nbeats.model import predict_model
+    elif model_type == 'nhits':
+        from nhits.model import predict_model
+
+    return predict_model(model, forecast_period, series,
+                         past_covariates=None)

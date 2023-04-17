@@ -1,4 +1,4 @@
-from darts.models import NBEATSModel
+from darts.models import NHiTSModel
 
 from pytorch_lightning.callbacks import EarlyStopping
 
@@ -10,26 +10,18 @@ devices = [0] if use_cuda else 1
 
 
 def default_model_config():
-
-    early_stopper = EarlyStopping(
-        "val_loss", min_delta=0.00005, patience=4, verbose=True)
-    callbacks = [early_stopper]
-
     model_config = {'input_chunk_length': 64,
                     'output_chunk_length': 3,
-                    'generic_architecture': True,
-                    'num_stacks': 4,
-                    'num_blocks': 2,
+                    'num_blocks': 3,
                     'num_layers': 4,
                     'layer_widths': 512,
-                    'n_epochs': 50,
+                    'n_epochs': 100,
                     'nr_epochs_val_period': 1,
                     'batch_size': 64,
-                    'optimizer_kwargs': {'lr': 0.0001},
+                    'optimizer_kwargs': {'lr': 0.0005},
                     'pl_trainer_kwargs': {
                         'accelerator': accelerator,
-                        'devices': devices,
-                        'callbacks': callbacks},
+                        'devices': devices},
                     'save_checkpoints': True,
                     'force_reset': True,
                     'model_name': 'nbeats_run'}
@@ -38,12 +30,12 @@ def default_model_config():
 
 def create_model():
     model_config = default_model_config()
-    model = NBEATSModel(**model_config)
+    model = NHiTSModel(**model_config)
     return model
 
 
 def load_model():
-    model = NBEATSModel.load("./nbeats/model.pkl")
+    model = NHiTSModel.load("./nbeats/model.pkl")
     return model
 
 
