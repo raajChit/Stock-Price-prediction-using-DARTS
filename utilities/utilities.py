@@ -64,21 +64,21 @@ def build_model(model_type, target_series, covariate_series, val_series, val_cov
     print('Model Type is ', model_type)
 
     if model_type == 'arima':
-        from arima.model import create_model, load_model, fit_model, predict_model
+        from arima.model import create_model, load_model, fit_model
     elif model_type == 'nbeats':
-        from nbeats.model import create_model, load_model, fit_model, predict_model
+        from nbeats.model import create_model, load_model, fit_model
     elif model_type == 'nhits':
-        from nhits.model import create_model, load_model, fit_model, predict_model
+        from nhits.model import create_model, load_model, fit_model
+    elif model_type == 'blockrnn':
+        from blockrnn.model import create_model, load_model, fit_model
+    elif model_type == 'tcn':
+        from tcn.model import create_model, load_model, fit_model
+    elif model_type == 'tft':
+        from tft.model import create_model, load_model, fit_model
     # elif model_type == 'transformer':
     #     from transformer.model import buildModel, getBestModel, getBestModelForTuning
-    # elif model_type == 'tft':
-    #     from tft.model import buildModel, getBestModel, getBestModelForTuning
-    # elif model_type == 'tcn':
-    #     from tcn.model import buildModel, getBestModel, getBestModelForTuning
     # elif model_type == 'rnn':
     #     from rnn.model import buildModel
-    # elif model_type == 'blockRNN':
-    #     from blockRNN.model import buildModel, getBestModel, getBestModelForTuning
     # elif model_type == 'lightGBM':
     #     from lightGBM.model import buildModel, getBestModel, getBestModelForTuning
     # elif model_type == 'catBoost':
@@ -183,6 +183,12 @@ def predict_for_model(model_type, model, forecast_period, series,
         from nbeats.model import predict_model
     elif model_type == 'nhits':
         from nhits.model import predict_model
+    elif model_type == 'blockRNN':
+        from blockrnn.model import predict_model
+    elif model_type == 'tcn':
+        from tcn.model import predict_model
+    elif model_type == 'tft':
+        from tft.model import predict_model
 
     return predict_model(model, forecast_period, series,
                          past_covariates=None)

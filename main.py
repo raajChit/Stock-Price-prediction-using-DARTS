@@ -65,7 +65,8 @@ else:
 
     predicted_series = TimeSeries.from_values(predicted_array)
 
-    plot_predicted([val_series, predicted_series], plot_labels, plot_colors)
+    plot_predicted([val_series, predicted_series], plot_labels, plot_colors,
+                   plot_file=f"./figures/{args.model}_actual_vs_predicted.png")
 
 #    mse_value, r2_value = get_metrics(predicted_series, val_series)
 #    print("mse value is : ", mse_value, "\nr2 value is : ", r2_value)
