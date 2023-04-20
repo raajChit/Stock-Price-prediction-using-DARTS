@@ -185,7 +185,7 @@ def predict_for_model(model_type, model, forecast_period, series,
         from nbeats.model import predict_model
     elif model_type == 'nhits':
         from nhits.model import predict_model
-    elif model_type == 'blockRNN':
+    elif model_type == 'blockrnn':
         from blockrnn.model import predict_model
     elif model_type == 'tcn':
         from tcn.model import predict_model
