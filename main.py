@@ -58,7 +58,7 @@ if args.mse == 'True':
 
 else:
     predicted_array = np.array(predict_for_all_data(
-        target_series, val_series, model, 3, 64, start_covariate_series=covariate_series, covariate_series=val_covariate_series)).flatten()
+        target_series, val_series, model, 3, 64, start_covariate_series=covariate_series, covariate_series=val_covariate_series, model_type=args.model)).flatten()
 
     plot_labels = ["Actual Values", "Predicted Values"]
     plot_colors = ['r', 'b', 'k']

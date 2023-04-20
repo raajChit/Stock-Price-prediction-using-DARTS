@@ -56,5 +56,8 @@ def fit_model(model, target_series, covariate_series=None, val_series=None, val_
 
 def predict_model(model, forecast_period, series,
                   past_covariates=None):
+                  
+    print("series is: ", len(series), "past covariates length", len(past_covariates))
     prediction_series = model.predict(forecast_period, series, past_covariates)
+    
     return prediction_series

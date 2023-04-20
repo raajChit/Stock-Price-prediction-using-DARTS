@@ -131,6 +131,7 @@ def get_metrics(inputs, targets):
 
 
 def predict_for_all_data(start_series, series_to_predict, model, forecast_period, input_lag, start_covariate_series=None, covariate_series=None, model_type='arima'):
+    
     values_to_forecast = len(series_to_predict)
     no_of_iterations = int(values_to_forecast/forecast_period) + \
         (values_to_forecast % forecast_period)
@@ -149,7 +150,7 @@ def predict_for_all_data(start_series, series_to_predict, model, forecast_period
             covariate_series, ignore_time_axis=True)
 
     print("Number of iterations ", no_of_iterations,
-          "Target length ", values_to_forecast)
+          "Target length ", values_to_forecast, "length of combined covariates", len(combined_covariate), "length of val covariate", len(covariate_series))
 
     for i in range(no_of_iterations):
         start_position = forecast_period * i
@@ -158,8 +159,9 @@ def predict_for_all_data(start_series, series_to_predict, model, forecast_period
         past_covariate = None
         if combined_covariate is not None:
             past_covariate = combined_covariate[:input_lag+start_position]
+        print("series is: ", len(combined_series[:input_lag + start_position]), "past covariates length", len(past_covariate) )
 
-            prediction_series = predict_for_model(model_type, model,
+        prediction_series = predict_for_model(model_type, model,
                                                   forecast_period, series=combined_series[:input_lag +
                                                                                           start_position],
                                                   past_covariates=past_covariate)
@@ -189,6 +191,7 @@ def predict_for_model(model_type, model, forecast_period, series,
         from tcn.model import predict_model
     elif model_type == 'tft':
         from tft.model import predict_model
+    print("series is: ", len(series), "past covariates length", len(past_covariates))
 
     return predict_model(model, forecast_period, series,
-                         past_covariates=None)
+                         past_covariates)
