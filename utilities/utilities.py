@@ -89,7 +89,7 @@ def build_model(model_type, target_series, covariate_series, val_series, val_cov
     else:
         print('Invalid model name supplied ')
         raise
-    if load == True:
+    if load == 'True':
         model = load_model()
     else:
         model = create_model()
