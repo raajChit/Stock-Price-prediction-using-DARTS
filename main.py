@@ -40,23 +40,9 @@ test_series, test_covariate_series = get_target_covariate_timeseries(
 model = build_model(args.model, target_series, covariate_series,
                     val_series, val_covariate_series, load=args.load)
 
-if args.mse == 'True' and args.model == 'arima':
-    forecast_period = [3, 5, 8]
-    mse_list = []
-    for item in forecast_period:
-        predict_value = model.predict(item)
-        mse_value, r2_value, mae_value = get_metrics(
-            predict_value, val_series[:item])
-        mse_list.append(mse_value)
-        print("\nmse value for forecast period ", item, " is : ", mse_value,
-              "\nr2 value for forecast period ", item, " is : ", r2_value, "\nmae value for forecast period ", item, " is : ", mae_value)
-    plt.xlabel('Forecast period')
-    plt.ylabel('MSE values')
-    plt.plot(forecast_period, mse_list)
-    plt.savefig('MSE_by_forecast_period.png')
-    plt.show()
 
-if args.mse == 'True' and args.model != 'arima':
+
+if args.mse == 'True':
     predicted_array = np.array(predict_for_all_data(
         target_series, val_series, model, 3, 64, start_covariate_series=covariate_series, covariate_series=val_covariate_series, model_type=args.model)).flatten()
     predicted_series = TimeSeries.from_values(predicted_array)
