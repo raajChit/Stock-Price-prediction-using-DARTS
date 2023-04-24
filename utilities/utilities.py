@@ -143,7 +143,7 @@ def predict_for_all_data(start_series, series_to_predict, model, forecast_period
 
     # Set combined covariate if past covariate is required
 
-    if covariate_series is None:
+    if covariate_series == None:
         combined_covariate = None
     else:
         combined_covariate = start_covariate_series[-input_lag:].concatenate(
