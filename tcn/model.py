@@ -54,7 +54,7 @@ def fit_model(model, target_series, covariate_series=None, val_series=None, val_
     return
 
 
-def predict_model(model, forecast_period, series,
-                  past_covariates=None):
+def predict_model(model, forecast_period, series, past_covariates):
+    # print("model sumary is: \n", len(series), len(past_covariates))
     prediction_series = model.predict(forecast_period, series, past_covariates)
     return prediction_series

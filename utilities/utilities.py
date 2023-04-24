@@ -145,12 +145,14 @@ def predict_for_all_data(start_series, series_to_predict, model, forecast_period
 
     if covariate_series == None:
         combined_covariate = None
+        print("1Number of iterations ", no_of_iterations,
+          "Target length ", values_to_forecast, "length of combined covariates", len(combined_covariate), "length of val covariate", len(covariate_series))
     else:
         combined_covariate = start_covariate_series[-input_lag:].concatenate(
             covariate_series, ignore_time_axis=True)
 
-    print("Number of iterations ", no_of_iterations,
-          "Target length ", values_to_forecast, "length of combined covariates", len(combined_covariate), "length of val covariate", len(covariate_series))
+    # print("2Number of iterations ", no_of_iterations,
+        #   "Target length ", values_to_forecast, "length of combined covariates", len(combined_covariate), "length of val covariate", len(covariate_series))
 
     for i in range(no_of_iterations):
         start_position = forecast_period * i
@@ -159,7 +161,7 @@ def predict_for_all_data(start_series, series_to_predict, model, forecast_period
         past_covariate = None
         if combined_covariate is not None:
             past_covariate = combined_covariate[:input_lag+start_position]
-        print("series is: ", len(combined_series[:input_lag + start_position]), "past covariates length", len(past_covariate) )
+        # print("series is: ", len(combined_series[:input_lag + start_position]), "past covariates length", len(past_covariate) )
 
         prediction_series = predict_for_model(model_type, model,
                                                   forecast_period, series=combined_series[:input_lag +
@@ -169,8 +171,8 @@ def predict_for_all_data(start_series, series_to_predict, model, forecast_period
         prediction_list.append(list(prediction_series.values().flatten()))
         # print("interim predict values ", prediction_list)
     prediction_list = reduce(concat, prediction_list)
-   # print("predict values for iteration ", i, " Start position ",
-   #       start_position, "are \n", prediction_list)
+    # print("predict values for iteration ", i, " Start position ",
+        #  start_position, "are \n", prediction_list)
 
     prediction_list = prediction_list[:values_to_forecast]
 
@@ -191,7 +193,7 @@ def predict_for_model(model_type, model, forecast_period, series,
         from tcn.model import predict_model
     elif model_type == 'tft':
         from tft.model import predict_model
-    print("series is: ", len(series), "past covariates length", len(past_covariates))
+    # print("series is: ", len(series), "past covariates length", len(past_covariates))
 
     return predict_model(model, forecast_period, series,
                          past_covariates)

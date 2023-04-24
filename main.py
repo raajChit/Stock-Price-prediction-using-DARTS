@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from darts import TimeSeries
-from utilities.utilities import get_preprocessed_datasets, get_target_covariate_timeseries, build_model, plot_predicted, get_metrics, predict_for_all_data
+from utilities.utilities import get_preprocessed_datasets, get_target_covariate_timeseries, build_model, plot_predicted, get_metrics, predict_for_all_data, predict_for_model
 import argparse
 
 parser = argparse.ArgumentParser(description='darts algorithms')
@@ -60,6 +60,8 @@ if args.mse == 'True' and args.model != 'arima':
     predicted_array = np.array(predict_for_all_data(
         target_series, val_series, model, 3, 64, start_covariate_series=covariate_series, covariate_series=val_covariate_series, model_type=args.model)).flatten()
     predicted_series = TimeSeries.from_values(predicted_array)
+    # predicted_array = np.array(predict_for_model(args.model, model, 3, target_series, covariate_series))
+    # predicted_series = predict_for_model(args.model, model, 3, target_series, covariate_series)
     mse_value, r2_value, mae_value = get_metrics(predicted_series, val_series)
     print("mse value is :", mse_value)
     print("mae value is :", mae_value)
