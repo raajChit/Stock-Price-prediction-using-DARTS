@@ -69,15 +69,15 @@ if args.mse == 'True' and args.model != 'arima':
 
 else:
     predicted_array = np.array(predict_for_all_data(
-        target_series, val_series, model, 3, 64, start_covariate_series=covariate_series, covariate_series=val_covariate_series, model_type=args.model)).flatten()
+        target_series, val_series[:9], model, 3, 64, start_covariate_series=covariate_series, covariate_series=val_covariate_series[:9], model_type=args.model)).flatten()
 
     plot_labels = ["Actual Values", "Predicted Values"]
     plot_colors = ['r', 'b', 'k']
 
     predicted_series = TimeSeries.from_values(predicted_array)
 
-    plot_predicted([val_series, predicted_series], plot_labels, plot_colors,
-                   plot_file=f"./figures/{args.model}_actual_vs_predicted.png")
+    plot_predicted([val_series[:9], predicted_series[:9]], plot_labels, plot_colors,
+                   plot_file=f"./figures/{args.model}_actual_vs_predicted_9_points.png")
 
 #    mse_value, r2_value = get_metrics(predicted_series, val_series)
 #    print("mse value is : ", mse_value, "\nr2 value is : ", r2_value)
